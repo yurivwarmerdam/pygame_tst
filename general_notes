@@ -1,0 +1,16 @@
+Sprite class has an inbuilt update and draw method
+
+Can also be added to a Group, which has an update and draw method, both of which will delegate to their contents.
+Groups (sprites?) also have a kill() funciton that allows the object to destroy itself
+There's also the spritecollide() function, allowing for a bunch of sprites to check collision with another sprite all at once.
+
+make everything out of boxes first:
+https://www.youtube.com/watch?v=bZeHah4eg-E
+(boxes are easy in this framework!)
+
+
+tilemap...
+
+3D array
+
+coordinate calculation?
