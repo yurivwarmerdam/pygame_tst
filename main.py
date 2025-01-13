@@ -22,7 +22,7 @@ class MainClass:
 
         self.movement = Vector2(0, 0)
         self.movement_speed = 3
-        self.collision_obstacle = Rect(50, 50, 300, 50)
+        self.collision_obstacle = Rect(550, 50, 50, 400)
         self.assets = {
             "fighter": load_image("art/sword_guy.png"),
             "wizard": load_image("art/wand_guy.png"),
