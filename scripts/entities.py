@@ -53,5 +53,5 @@ class JitterSquare(pg.sprite.Sprite):
                 self.walking = False
             return
 
-    def render(self, surface: Surface):
-        pg.draw.rect(surface, pg.Color("cyan"), self.rect)
+    # def render(self, surface: Surface):
+    #     pg.draw.rect(surface, pg.Color("cyan"), self.rect)

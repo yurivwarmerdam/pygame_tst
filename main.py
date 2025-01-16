@@ -4,9 +4,8 @@ from pygame import Rect
 from pygame.math import Vector2
 from pygame.sprite import Group
 from scripts.entities import PhysicsEntity, JitterSquare
-from scripts.utils import load_image, sheet_to_sprite
+from scripts.utils import load_image, #sheet_to_sprite
 from scripts.tilemap import Tilemap
-
 
 class MainClass:
     def __init__(self):
