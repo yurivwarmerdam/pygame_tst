@@ -4,8 +4,9 @@ from pygame import Rect
 from pygame.math import Vector2
 from pygame.sprite import Group
 from scripts.entities import PhysicsEntity, JitterSquare
-from scripts.utils import load_image, #sheet_to_sprite
+from scripts.utils import load_image  # , sheet_to_sprite
 from scripts.tilemap import Tilemap
+
 
 class MainClass:
     def __init__(self):
@@ -41,7 +42,7 @@ class MainClass:
         # self.empty_tile: Rect = sheet_to_sprite(ground_sheet, Rect(0, 0, 34, 20))
         # self.empty_tile_rect = self.empty_tile.get_rect(center=(0, 0))
         # self.jitter_square = JitterSquare(self, pos=Vector2(300, 300))
-        self.square_group = Group(
+        self.skeletons = Group(
             JitterSquare(self, self.assets["skeleton"], self.player, Vector2(300, 300)),
             JitterSquare(self, self.assets["skeleton"], self.player, Vector2(280, 280)),
             JitterSquare(self, self.assets["skeleton"], self.player, Vector2(280, 200)),
@@ -52,11 +53,12 @@ class MainClass:
             JitterSquare(self, self.assets["skeleton"], self.player, Vector2(325, 317)),
         )
 
-        self.tilemap = Tilemap(
-            self, [self.assets["dirt"], self.assets["tomato"]], (16, 16), (12, 10, 2)
-        )
-        self.tilemap.set_cell(0, 0, 0, 0)
-        self.tilemap.set_cell(0, 0, 1, 1)
+        # self.tilemap = Tilemap(
+        #     self, [self.assets["dirt"], self.assets["tomato"]], (16, 16), (12, 10, 2)
+        # )
+        # self.tilemap.set_cell(0, 0, 0, 0)
+        # self.tilemap.set_cell(0, 0, 1, 1)
+        self.tilemap = Tilemap("art/tmx/field.tmx", ["ground", "plants and graves"])
 
     def main(self):
         while True:
@@ -77,12 +79,14 @@ class MainClass:
 
             # update entities
             self.player.update(self.movement)
-            self.square_group.update()
+            self.skeletons.update()
 
             # draw bg
-            self.tilemap.render(self.display)
+            # self.tilemap.render(self.display)
+            self.tilemap.get_layer("ground").draw(self.display)
             # draw entities
-            self.square_group.draw(self.display)
+            self.skeletons.draw(self.display)
+            self.tilemap.get_layer("plants and graves").draw(self.display)
             self.player.render(self.display)
 
             player_collision = pg.Rect(*self.player.pos, *self.player.size)
