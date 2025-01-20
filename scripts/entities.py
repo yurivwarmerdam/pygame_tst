@@ -2,6 +2,7 @@ import pygame as pg
 from pygame.math import Vector2
 from pygame import Surface
 from random import randint, random
+from scripts.tilemap import Tilemap
 
 
 class PhysicsEntity:
@@ -23,14 +24,22 @@ class PhysicsEntity:
         surface.blit(self.sprite, self.pos)
 
 
-class JitterSquare(pg.sprite.Sprite):
-    def __init__(self, game, sprite: Surface, player: PhysicsEntity, pos=Vector2(0, 0)):
+class Skeleton(pg.sprite.Sprite):
+    def __init__(
+        self,
+        game,
+        sprite: Surface,
+        player: PhysicsEntity,
+        tilemap: Tilemap,
+        pos=Vector2(0, 0),
+    ):
         pg.sprite.Sprite.__init__(self)
         self.game = game
         self.rect = sprite.get_rect()
         self.rect.center = pos
         self.image = sprite
         self.player = player
+        self.tilemap = tilemap
 
         self.walking = False
         self.walk_goal = Vector2(0, 0)

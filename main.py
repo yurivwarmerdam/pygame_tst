@@ -3,7 +3,7 @@ import pygame as pg
 from pygame import Rect
 from pygame.math import Vector2
 from pygame.sprite import Group
-from scripts.entities import PhysicsEntity, JitterSquare
+from scripts.entities import PhysicsEntity, Skeleton
 from scripts.utils import load_image  # , sheet_to_sprite
 from scripts.tilemap import Tilemap
 
@@ -38,27 +38,36 @@ class MainClass:
             self.assets["wizard"].get_size(),
             self.assets["wizard"],
         )
-        # ground_sheet = load_image("art/ground.png")
-        # self.empty_tile: Rect = sheet_to_sprite(ground_sheet, Rect(0, 0, 34, 20))
-        # self.empty_tile_rect = self.empty_tile.get_rect(center=(0, 0))
-        # self.jitter_square = JitterSquare(self, pos=Vector2(300, 300))
+
         self.skeletons = Group(
-            JitterSquare(self, self.assets["skeleton"], self.player, Vector2(300, 300)),
-            JitterSquare(self, self.assets["skeleton"], self.player, Vector2(280, 280)),
-            JitterSquare(self, self.assets["skeleton"], self.player, Vector2(280, 200)),
-            JitterSquare(self, self.assets["skeleton"], self.player, Vector2(200, 300)),
-            JitterSquare(self, self.assets["skeleton"], self.player, Vector2(250, 310)),
-            JitterSquare(self, self.assets["skeleton"], self.player, Vector2(330, 320)),
-            JitterSquare(self, self.assets["skeleton"], self.player, Vector2(310, 340)),
-            JitterSquare(self, self.assets["skeleton"], self.player, Vector2(325, 317)),
+            Skeleton(
+                self, self.assets["skeleton"], self.player, Tilemap, Vector2(300, 300)
+            ),
+            Skeleton(
+                self, self.assets["skeleton"], self.player, Tilemap, Vector2(280, 280)
+            ),
+            Skeleton(
+                self, self.assets["skeleton"], self.player, Tilemap, Vector2(280, 200)
+            ),
+            Skeleton(
+                self, self.assets["skeleton"], self.player, Tilemap, Vector2(200, 300)
+            ),
+            Skeleton(
+                self, self.assets["skeleton"], self.player, Tilemap, Vector2(250, 310)
+            ),
+            Skeleton(
+                self, self.assets["skeleton"], self.player, Tilemap, Vector2(330, 320)
+            ),
+            Skeleton(
+                self, self.assets["skeleton"], self.player, Tilemap, Vector2(310, 340)
+            ),
+            Skeleton(
+                self, self.assets["skeleton"], self.player, Tilemap, Vector2(325, 317)
+            ),
         )
 
-        # self.tilemap = Tilemap(
-        #     self, [self.assets["dirt"], self.assets["tomato"]], (16, 16), (12, 10, 2)
-        # )
-        # self.tilemap.set_cell(0, 0, 0, 0)
-        # self.tilemap.set_cell(0, 0, 1, 1)
         self.tilemap = Tilemap("art/tmx/field.tmx", ["ground", "plants and graves"])
+        print(self.tilemap.layers["ground"].sprites())
 
     def main(self):
         while True:
@@ -78,16 +87,9 @@ class MainClass:
             pg.draw.rect(self.display, (40, 40, 40), self.collision_obstacle)
 
             # update entities
-            self.player.update(self.movement)
-            self.skeletons.update()
+            self.update()
 
-            # draw bg
-            # self.tilemap.render(self.display)
-            self.tilemap.get_layer("ground").draw(self.display)
-            # draw entities
-            self.skeletons.draw(self.display)
-            self.tilemap.get_layer("plants and graves").draw(self.display)
-            self.player.render(self.display)
+            self.draw()
 
             player_collision = pg.Rect(*self.player.pos, *self.player.size)
             if player_collision.colliderect(self.collision_obstacle):
@@ -106,6 +108,19 @@ class MainClass:
         self.movement = Vector2(0, 0)
         self.movement.x = keys[pg.K_RIGHT] - keys[pg.K_LEFT]
         self.movement.y = keys[pg.K_DOWN] - keys[pg.K_UP]
+
+    def update(self):
+        self.player.update(self.movement)
+        self.skeletons.update()
+
+    def draw(self):
+        # draw bg
+        # self.tilemap.render(self.display)
+        self.tilemap.get_layer("ground").draw(self.display)
+        # draw entities
+        self.skeletons.draw(self.display)
+        self.tilemap.get_layer("plants and graves").draw(self.display)
+        self.player.render(self.display)
 
     def quit(self):
         pg.quit()

@@ -1,6 +1,7 @@
 import pygame as pg
 # from pygame import Surface, sprite
 from pytmx.util_pygame import load_pygame
+from pygame.sprite import Group
 
 class Tile(pg.sprite.Sprite):
     def __init__(self, pos, surf, *groups):
@@ -24,6 +25,21 @@ class Tilemap():
     def get_layer(self,layer):
         return self.layers[layer]
     
+    def get_neigbors(pos,distance=1):
+        result=[]
+        for x in range(-distance,distance):
+            for y in range(-distance,distance):
+                if (x,y) == pos:
+                    continue
+                result.append((x,y))
+        return result
+
+
+    def set_tile(self, tile_pos,layer,tile_id=0):
+        if tile_id == 0:
+            self.layers[layer]
+        pass
+
     # def __init__(self, game, tiles, tile_size=(16, 16), map_size=(12, 10, 1)):
     #     self.game = game
     #     self.tile_size = tile_size
