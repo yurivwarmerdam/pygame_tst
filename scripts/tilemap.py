@@ -1,7 +1,7 @@
 import pygame as pg
 # from pygame import Surface, sprite
 from pytmx.util_pygame import load_pygame
-from pygame.sprite import Group
+
 
 class Tile(pg.sprite.Sprite):
     def __init__(self, pos, surf, *groups):

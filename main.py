@@ -3,9 +3,10 @@ import pygame as pg
 from pygame import Rect
 from pygame.math import Vector2
 from pygame.sprite import Group
-from scripts.entities import PhysicsEntity, Skeleton
+from scripts.entities import PlayerEntity, Skeleton, Seed
 from scripts.utils import load_image  # , sheet_to_sprite
 from scripts.tilemap import Tilemap
+from scripts.ui import ManaBar
 
 
 class MainClass:
@@ -30,13 +31,18 @@ class MainClass:
             "dirt": load_image("art/dirt.png"),
             "gravestone": load_image("art/gravestone.png"),
             "tomato": load_image("art/tomato.png"),
+            "seed": load_image("art/seed.png"),
         }
-        self.player = PhysicsEntity(
+        self.player = PlayerEntity(
             self,
             "player",
             Vector2(50, 50),
             self.assets["wizard"].get_size(),
             self.assets["wizard"],
+        )
+
+        self.seeds = Group(
+            Seed(self, self.assets["seed"], Vector2(200, 300)),
         )
 
         self.skeletons = Group(
@@ -66,6 +72,8 @@ class MainClass:
             ),
         )
 
+        self.ui = Group(ManaBar(self))
+
         self.tilemap = Tilemap("art/tmx/field.tmx", ["ground", "plants and graves"])
         print(self.tilemap.layers["ground"].sprites())
 
@@ -81,15 +89,17 @@ class MainClass:
                     event.type == pg.KEYDOWN and event.key == pg.K_F8
                 ):
                     self.quit()
+                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                    self.player.action()
             # ----------main body------------#
             self.handle_key_input()
 
             pg.draw.rect(self.display, (40, 40, 40), self.collision_obstacle)
 
             # update entities
-            self.update()
+            self.update_all()
 
-            self.draw()
+            self.draw_all()
 
             player_collision = pg.Rect(*self.player.pos, *self.player.size)
             if player_collision.colliderect(self.collision_obstacle):
@@ -104,23 +114,27 @@ class MainClass:
             self.clock.tick(60)
 
     def handle_key_input(self):
-        keys = pg.key.get_pressed()
+        self.keys_pressed = pg.key.get_pressed()
         self.movement = Vector2(0, 0)
-        self.movement.x = keys[pg.K_RIGHT] - keys[pg.K_LEFT]
-        self.movement.y = keys[pg.K_DOWN] - keys[pg.K_UP]
+        self.movement.x = self.keys_pressed[pg.K_RIGHT] - self.keys_pressed[pg.K_LEFT]
+        self.movement.y = self.keys_pressed[pg.K_DOWN] - self.keys_pressed[pg.K_UP]
 
-    def update(self):
-        self.player.update(self.movement)
+    def update_all(self):
+        self.player.update(self.movement, self.keys_pressed)
+        self.seeds.update()
         self.skeletons.update()
+        self.ui.update()
 
-    def draw(self):
+    def draw_all(self):
         # draw bg
         # self.tilemap.render(self.display)
         self.tilemap.get_layer("ground").draw(self.display)
         # draw entities
+        self.seeds.draw(self.display)
         self.skeletons.draw(self.display)
         self.tilemap.get_layer("plants and graves").draw(self.display)
         self.player.render(self.display)
+        self.ui.draw(self.display)
 
     def quit(self):
         pg.quit()

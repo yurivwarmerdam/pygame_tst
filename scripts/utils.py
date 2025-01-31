@@ -35,10 +35,10 @@ def sheet_to_sprite(surface: Surface, rect: Rect):
 def sheet_to_sprites_with_pad(sheet: Surface, tile_size: Vector2, pad=(0, 0)) -> dict:
     sprites = []
     remaining_x = sheet.get_size()[0]
-    row_num = 0
+    
     while remaining_x >= tile_size[0]:
         pass
-    remaining_y = sheet.get_size()[1]
+    
 
     cols = int(sheet.get_size()[0] / tile_size.x)
     rows = int(sheet.get_size()[1] / tile_size.y)
